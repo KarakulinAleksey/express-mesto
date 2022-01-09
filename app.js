@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
 
+const ERROR_CODE_404 = 404;
+
 const { PORT = 3000 } = process.env;
 
 const app = express();
@@ -26,6 +28,9 @@ app.use((req, res, next) => {
 
 app.use(routerUsers);
 app.use(routerCards);
+app.use((req, res) => {
+  res.status(ERROR_CODE_404).send({ message: 'Запрошен не существующий роут.' });
+});
 
 app.listen(PORT, () => {
   console.log(`App listing on port ${PORT}`);
