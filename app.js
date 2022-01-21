@@ -1,8 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
 const routerUsers = require('./routes/users');
 const routerCards = require('./routes/cards');
+const auth = require('./middlewares/auth');
+const { createUser, login } = require('./controllers/users');
+const errorHandler = require('./middlewares/error-handler');
+
+const {
+  loginValidator,
+  createUserValidator,
+} = require('./validators/celebrate-validators');
 
 const ERROR_CODE_404 = 404;
 
@@ -19,15 +28,16 @@ mongoose
 
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '61d6b6945cac41328844ed07',
-  };
-  next();
-});
+app.post('/signin', loginValidator, login);
+app.post('/signup', createUserValidator, createUser);
+
+app.use(auth);
 
 app.use(routerUsers);
 app.use(routerCards);
+app.use(errors());
+app.use(errorHandler);
+
 app.use((req, res) => {
   res.status(ERROR_CODE_404).send({ message: 'Запрошен не существующий роут.' });
 });
