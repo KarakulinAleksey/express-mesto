@@ -7,13 +7,12 @@ const routerCards = require('./routes/cards');
 const auth = require('./middlewares/auth');
 const { createUser, login } = require('./controllers/users');
 const errorHandler = require('./middlewares/error-handler');
+const errorRoutes = require('./middlewares/error-routes');
 
 const {
   loginValidator,
   createUserValidator,
 } = require('./validators/celebrate-validators');
-
-const ERROR_CODE_404 = 404;
 
 const { PORT = 3000 } = process.env;
 
@@ -36,11 +35,9 @@ app.use(auth);
 app.use(routerUsers);
 app.use(routerCards);
 app.use(errors());
-app.use(errorHandler);
 
-app.use((req, res) => {
-  res.status(ERROR_CODE_404).send({ message: 'Запрошен не существующий роут.' });
-});
+app.use(errorRoutes);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listing on port ${PORT}`);

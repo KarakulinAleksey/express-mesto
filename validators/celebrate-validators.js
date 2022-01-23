@@ -1,9 +1,17 @@
 const { celebrate, Joi } = require('celebrate');
+const { isURL } = require('validator');
+
+const urlValidator = (value) => {
+  if (!isURL(value)) {
+    throw new Error('URL validation err');
+  }
+  return value;
+};
 
 module.exports.createCardValidator = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().pattern(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?#?$/),
+    link: Joi.string().required().custom(urlValidator),
   }),
 });
 
@@ -16,9 +24,9 @@ module.exports.loginValidator = celebrate({
 
 module.exports.createUserValidator = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    about: Joi.string().required().min(2).max(30),
-    avatar: Joi.string().required().pattern(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?#?$/),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string().custom(urlValidator),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
   }),
@@ -33,7 +41,7 @@ module.exports.updateProfileUserValidator = celebrate({
 
 module.exports.updateAvatarUserValidator = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().pattern(/^(https?:\/\/)([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?#?$/),
+    avatar: Joi.string().required().custom(urlValidator),
   }),
 });
 
