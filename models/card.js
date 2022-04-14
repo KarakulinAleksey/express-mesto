@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const cardSchema = new mongoose.Schema(
   {
@@ -10,6 +11,7 @@ const cardSchema = new mongoose.Schema(
     },
     link: {
       type: String,
+      validate: [validator.isURL, 'Некорректная ссылка на картинку'], // 15
       required: true,
     },
     owner: {
