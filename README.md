@@ -22,8 +22,7 @@
 
 ### Инструкция по развёртыванию:
 - Клонируйте репозиторий к себе на компьютер с помощью команды:  
-
-`git clone https://github.com/KarakulinAleksey/express-mesto.git`
+  `git clone https://github.com/KarakulinAleksey/express-mesto.git`
 - Откройте репозиторий проекта и выполните команду:
 `npm i`
 - Чтобы запустить проект, в репозитории проекта выполните команду:
